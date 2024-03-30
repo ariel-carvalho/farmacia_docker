@@ -1,0 +1,36 @@
+version: '3.9'
+
+services:
+  mysql:
+    image: mysql:latest
+    container_name: farmaciaapirest
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: farmacia_api_rest
+    volumes:
+      - volume-farmaciaapirest:/var/lib/mysql
+    ports:
+      - "3333:3306"
+    networks:
+      - redeapi
+
+  farmacia_api_rest:
+    image: farmaciaapirest
+    container_name: farmacia_api
+    environment:
+      MYSQL_HOST: farmaciaapirest
+      MYSQL_DATABASE: farmacia_sprig_api
+    ports:
+      - "8080:8080"
+    networks:
+    - redeapi
+    depends_on:
+      - mysql
+      -
+networks:
+  redeapi:
+    driver: bridge
+
+volumes:
+  volume-farmaciaapirest:
+    external: true
